@@ -1,0 +1,224 @@
+<html>
+
+<style>
+p.a {
+  white-space: pre;
+  color: white;
+}
+</style>
+
+<body style="background-color:black;">
+
+<canvas id="myCanvas" onload = 'move()' onclick = "clickfunc()" width="800" height="450" style=" padding-left: 0;
+    padding-right: 0;
+	
+    margin-left: auto;
+    margin-right: auto;
+	margin-top: 0px;
+    display: block;border:3px solid white;">
+</canvas>
+
+</body>
+
+
+<script>
+var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d");
+ctx.font = "16px Arial";
+
+var canvasX = 0; 
+var canvasY = 0; 
+canvas.addEventListener("mousemove", function(e) { 
+    var cRect = canvas.getBoundingClientRect();              // Gets the CSS positions along with width/height
+    canvasX = Math.round(e.clientX - cRect.left);        // Subtract the 'left' of the canvas from the X/Y
+    canvasY = Math.round(e.clientY - cRect.top);         // positions to get make (0,0) the top left of the    
+});
+
+
+function sound(src) {
+ this.sound = document.createElement("audio");
+this.sound.src = src;
+this.sound.setAttribute("preload", "auto");
+this.sound.setAttribute("controls", "none");
+this.sound.style.display = "none";
+document.body.appendChild(this.sound);
+this.play = function(){
+this.sound.play();
+}
+this.stop = function(){
+this.sound.pause();
+}   
+}
+
+//backtrack = new sound("sounds/backtrack.mp3");
+
+var button = function(x,y,w,c1,c2,c3,n,s,m,show) {
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = this.w*4/3;
+	this.c1 = c1;
+	this.c2 = c2;
+	this.c3 = c3;
+	this.n = n;
+	this.s = s; 
+	this.m = m;
+	this.verified = false;
+	this.checking = false;
+	this.purchased = false;
+	this.show = show;
+	
+};
+
+button.prototype.draw = function() {
+
+    if (this.s == scene && this.show == "on"){
+		if (this.c - points > 0){ctx.shadowColor = "red";}
+		if (this.c - points < 0){ctx.shadowColor = "green";}
+		if (this.purchased == true){ctx.shadowColor = "orange";}
+		
+    ctx.shadowBlur = 1;
+    ctx.shadowOffsetX = 0.5;
+    ctx.shadowOffsetY = 0.5;
+	
+	ctx.drawImage(backboard,-shiftX - 319 + this.x,-shiftY - 60 + this.y,800,400);
+
+     ctx.shadowBlur = 0;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+	var myImage = new Image(100, 200);
+    myImage.src = 'celebs/' + this.n + '.png';
+    ctx.drawImage(myImage,this.x - shiftX,this.y - shiftY,this.w,this.h);
+	
+	ctx.drawImage(wrapper,-shiftX - 319 + this.x,-shiftY - 60 + this.y,800,400);
+	
+	 ctx.shadowBlur = 1;
+    ctx.shadowOffsetX = 0.5;
+    ctx.shadowOffsetY = 0.5;
+	
+	if (this.c1 - points > 0){ctx.shadowColor = "red";}
+	if (this.c1 - points < 0){ctx.shadowColor = "green";}
+	if (this.purchased == true){ctx.shadowColor = "orange";}
+	
+	ctx.font = "50px Times New Roman";
+    ctx.fillStyle = "white";
+	
+	ctx.fillText("X " + String(this.c1),this.x + 365 - shiftX,this.y + 60 - shiftY);
+	ctx.fillText("X " + String(this.c2),this.x + 365 - shiftX,this.y + 170 - shiftY);
+	ctx.fillText("X " + String(this.c3),this.x + 365 - shiftX,this.y + 280 - shiftY);
+	
+	ctx.font = "25px Times New Roman";
+    ctx.fillStyle = "black";
+	ctx.fillText(this.n,this.x - 5 - shiftX,this.y + 290 - shiftY);
+	
+
+	
+
+	}
+	
+   if (this.purchased == true){ctx.strokeStyle = "green"; ctx.drawImage(check,this.x - shiftX,this.y - shiftY,this.w,this.h);}
+
+	
+	if (this.checking == true && this.purchased == false){
+		this.verified = true;
+		if (this.s != scene){this.verified = false;}
+		if (points - this.c1 < 0){this.verified = false;}
+	}
+	
+	if (this.verified == true){
+	    if (this.purchased == false){
+		points = points - this.c1; 
+		printout += this.n + this.m + "\n\n";
+
+		}
+		this.purchased = true;
+	}
+};
+
+var buttonArray = [];
+
+buttonArray.push(new button(319,60,200,5,3,2,"Lacey Chabert",1, ": custom message here","on"));
+
+//buttonArray.push(new button(300,50,200,5,"Milana Vayntrub",1, ": custom message here","on"));
+
+//buttonArray.push(new button(550,50,200,8,"Selena Gomez",1, ": custom message here","on"));
+
+
+function clickfunc(){
+
+for(var i = 0; i < buttonArray.length ; i++) {
+			if (canvasX > buttonArray[i].x - shiftX && canvasX < buttonArray[i].x + buttonArray[i].w - shiftX){
+				if (canvasY > buttonArray[i].y - shiftY && canvasY < buttonArray[i].y + buttonArray[i].h - shiftY){
+					if (scene == buttonArray[i].s){buttonArray[i].checking = true;}
+				}
+				
+			}
+			
+}
+
+
+
+}//End clickfunc
+
+var myVar = setInterval(move, 20);
+
+var scene = 1; 
+
+var points = 10;
+
+var shiftX = 0;
+
+var shiftY = 0;
+
+var printout = "";
+
+function move() {
+
+//BG
+ctx.fillStyle = "black";
+ctx.fillRect(0,0, 800, 400);
+
+ctx.fillStyle = "gray";
+ctx.fillRect(0,400, 800, 400);
+
+ctx.font = "20px Arial";
+ctx.fillStyle = "white";
+ctx.fillText("X: " + canvasX,4,420);
+ctx.fillText("Y: " + canvasY,3,440);
+
+ctx.fillText("shiftX: " + shiftX,220,420);
+ctx.fillText("shiftY: " + shiftY,220,440);
+
+
+ctx.fillText("Scene: " + scene,80,420);
+ctx.fillText("Points: " + points,80,440);
+
+
+
+//Prototypes
+for(var i = 0; i < buttonArray.length ; i++) {
+        buttonArray[i].draw();
+}
+ctx.shadowColor = "black";
+ctx.shadowBlur = 0;
+ctx.shadowOffsetX = 0;
+ctx.shadowOffsetY = 0;
+
+
+document.getElementById("demo").innerHTML = printout; 
+
+
+}//End of FUNCTION
+
+
+</script>
+
+<p class="a" id = "demo" value = ""></p>
+
+<img id="check"  style="display:none; visibility:hidden;" src="gui/check.png" alt="">
+<img id="backboard"  style="display:none; visibility:hidden;" src="gui/backboard.png" alt="">
+<img id="wrapper"  style="display:none; visibility:hidden;" src="gui/wrapper.png" alt="">
+
+</html> 
+
+
