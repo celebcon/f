@@ -73,9 +73,7 @@ var button = function(x,y,w,c1,c2,c3,n,s,m,show) {
 button.prototype.draw = function() {
 
     if (this.s == scene && this.show == "on"){
-		if (this.c - points > 0){ctx.shadowColor = "red";}
-		if (this.c - points < 0){ctx.shadowColor = "green";}
-		if (this.purchased == true){ctx.shadowColor = "orange";}
+		
 		
     ctx.shadowBlur = 1;
     ctx.shadowOffsetX = 0.5;
@@ -96,9 +94,6 @@ button.prototype.draw = function() {
     ctx.shadowOffsetX = 0.5;
     ctx.shadowOffsetY = 0.5;
 	
-	if (this.c1 - points > 0){ctx.shadowColor = "red";}
-	if (this.c1 - points < 0){ctx.shadowColor = "green";}
-	if (this.purchased == true){ctx.shadowColor = "orange";}
 	
 	ctx.font = "50px Times New Roman";
     ctx.fillStyle = "white";
@@ -110,9 +105,6 @@ button.prototype.draw = function() {
 	ctx.font = "25px Times New Roman";
     ctx.fillStyle = "black";
 	ctx.fillText(this.n,this.x - 5 - shiftX,this.y + 290 - shiftY);
-	
-
-	
 
 	}
 	
@@ -122,12 +114,16 @@ button.prototype.draw = function() {
 	if (this.checking == true && this.purchased == false){
 		this.verified = true;
 		if (this.s != scene){this.verified = false;}
-		if (points - this.c1 < 0){this.verified = false;}
+		if (p1 - this.c1 < 0){this.verified = false;}
+		if (p2 - this.c2 < 0){this.verified = false;}
+		if (p3 - this.c3 < 0){this.verified = false;}
 	}
 	
 	if (this.verified == true){
 	    if (this.purchased == false){
-		points = points - this.c1; 
+		p1 = p1 - this.c1; 
+		p2 = p2 - this.c2; 
+		p3 = p3 - this.c3; 
 		printout += this.n + this.m + "\n\n";
 
 		}
@@ -137,11 +133,11 @@ button.prototype.draw = function() {
 
 var buttonArray = [];
 
-buttonArray.push(new button(319,60,200,5,3,2,"Lacey Chabert",1, ": custom message here","on"));
+buttonArray.push(new button(319,60,200,5,3,2,"Helga Lovekaty",1, "","on"));
 
-//buttonArray.push(new button(300,50,200,5,"Milana Vayntrub",1, ": custom message here","on"));
+buttonArray.push(new button(319,60 + 400,200,4,2,1,"Lacey Chabert",1, "","on"));
 
-//buttonArray.push(new button(550,50,200,8,"Selena Gomez",1, ": custom message here","on"));
+buttonArray.push(new button(319,60 + 400*2,200,4,2,1,"Cara Delevingne",1, "","on"));
 
 
 function clickfunc(){
@@ -156,6 +152,10 @@ for(var i = 0; i < buttonArray.length ; i++) {
 			
 }
 
+if (shiftY == delshiftY){
+if (scene == 1 && canvasX > 190 && canvasX < 270 && canvasY > 90 && canvasY < 200 && shiftY != 0){delshiftY-=400; acc = 40;}
+if (scene == 1 && canvasX > 190 && canvasX < 270 && canvasY > 240 && canvasY < 330){delshiftY+=400; acc = 40;}
+}
 
 
 }//End clickfunc
@@ -170,7 +170,15 @@ var shiftX = 0;
 
 var shiftY = 0;
 
+var delshiftY = 0;
+
+var acc = 0;
+
 var printout = "";
+
+var p1 = 10;
+var p2 = 8;
+var p3 = 6; 
 
 function move() {
 
@@ -178,8 +186,36 @@ function move() {
 ctx.fillStyle = "black";
 ctx.fillRect(0,0, 800, 400);
 
+
+if (scene == 1){
+ctx.drawImage(sky,0,0,800,400);
+ctx.drawImage(playertab,0,0,800,400);
+ctx.drawImage(arrows,0,20,800,400);
+
+ctx.font = "30px Times New Roman";
+ctx.fillStyle = "white";
+ctx.fillText("X " + String(p1),82,50);
+ctx.fillText("X " + String(p2),82,130);
+ctx.fillText("X " + String(p3),82,205);
+
+if (shiftY < delshiftY){shiftY += acc; acc = acc - 1;}
+if (shiftY > delshiftY){shiftY -= acc; acc = acc - 1;}
+
+
+}//END SCENE 1
+
+//Prototypes
+for(var i = 0; i < buttonArray.length ; i++) {
+        buttonArray[i].draw();
+}
+ctx.shadowColor = "black";
+ctx.shadowBlur = 0;
+ctx.shadowOffsetX = 0;
+ctx.shadowOffsetY = 0;
+
 ctx.fillStyle = "gray";
 ctx.fillRect(0,400, 800, 400);
+
 
 ctx.font = "20px Arial";
 ctx.fillStyle = "white";
@@ -192,18 +228,6 @@ ctx.fillText("shiftY: " + shiftY,220,440);
 
 ctx.fillText("Scene: " + scene,80,420);
 ctx.fillText("Points: " + points,80,440);
-
-
-
-//Prototypes
-for(var i = 0; i < buttonArray.length ; i++) {
-        buttonArray[i].draw();
-}
-ctx.shadowColor = "black";
-ctx.shadowBlur = 0;
-ctx.shadowOffsetX = 0;
-ctx.shadowOffsetY = 0;
-
 
 document.getElementById("demo").innerHTML = printout; 
 
@@ -218,6 +242,9 @@ document.getElementById("demo").innerHTML = printout;
 <img id="check"  style="display:none; visibility:hidden;" src="gui/check.png" alt="">
 <img id="backboard"  style="display:none; visibility:hidden;" src="gui/backboard.png" alt="">
 <img id="wrapper"  style="display:none; visibility:hidden;" src="gui/wrapper.png" alt="">
+<img id="playertab"  style="display:none; visibility:hidden;" src="gui/playertab.png" alt="">
+<img id="arrows"  style="display:none; visibility:hidden;" src="gui/arrows.png" alt="">
+<img id="sky"  style="display:none; visibility:hidden;" src="gui/sky.png" alt="">
 
 </html> 
 
