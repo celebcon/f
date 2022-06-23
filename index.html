@@ -108,15 +108,15 @@ button.prototype.draw = function() {
 
 	}
 	
-   if (this.purchased == true){ctx.strokeStyle = "green"; ctx.drawImage(check,this.x - shiftX,this.y - shiftY,this.w,this.h);}
+   if (this.purchased == true){ctx.strokeStyle = "green"; if (scene == 1){ctx.drawImage(check,this.x - shiftX,this.y - shiftY,this.w,this.h);}}
 
 	
 	if (this.checking == true && this.purchased == false){
 		this.verified = true;
 		if (this.s != scene){this.verified = false;}
-		if (p1 - this.c1 < 0){this.verified = false; ctx.drawImage(cross,this.x - shiftX,this.y - shiftY,this.w,this.h);}
-		if (p2 - this.c2 < 0){this.verified = false; ctx.drawImage(cross,this.x - shiftX,this.y - shiftY,this.w,this.h);}
-		if (p3 - this.c3 < 0){this.verified = false; ctx.drawImage(cross,this.x - shiftX,this.y - shiftY,this.w,this.h);}
+		if (p1 - this.c1 < 0){this.verified = false; if (scene == 1){ctx.drawImage(cross,this.x - shiftX,this.y - shiftY,this.w,this.h);}}
+		if (p2 - this.c2 < 0){this.verified = false; if (scene ==1){ctx.drawImage(cross,this.x - shiftX,this.y - shiftY,this.w,this.h);}}
+		if (p3 - this.c3 < 0){this.verified = false; if (scene == 1){ctx.drawImage(cross,this.x - shiftX,this.y - shiftY,this.w,this.h);}}
 	}
 	
 	if (this.verified == true){
@@ -125,7 +125,7 @@ button.prototype.draw = function() {
 		p2 = p2 - this.c2; 
 		p3 = p3 - this.c3; 
 		printout += this.n + this.m + "\n\n";
-
+        purchasedArray.push(this.n);
 		}
 		this.purchased = true;
 	}
@@ -198,6 +198,21 @@ if (scene == -19 && canvasX > 220 && canvasX < 590 && canvasY > 315 && canvasY <
 
 if (scene == -20 && canvasX > 220 && canvasX < 590 && canvasY > 250 && canvasY < 340){scene = -19; delshiftY+=400; acc = 40;}
 
+
+if (scene == 3 && canvasX > 180 && canvasX < 630 && canvasY > 320){scene = 4; copytoclipboard(printout);}
+
+if (scene == 3 && canvasX > 160 && canvasX < 310 && canvasY > 70 && canvasY < 310 && p1 > 1 && slipPotion == 0){p1 = p1 - 2; slipPotion = 1; printout+="\n\nSlippery Potion"}
+
+if (scene == 3 && canvasX > 320 && canvasX < 470 && canvasY > 70 && canvasY < 310 && p3 > 0 && sensPotion == 0){p3 = p3 - 1; sensPotion = 1;  printout+="\n\nSensitive Potion"}
+
+if (scene == 3 && canvasX > 480 && canvasX < 630 && canvasY > 70 && canvasY < 310 && p2 > 0 && refreshPotion == 0){p2 = p2 - 1; refreshPotion = 1;  printout+="\n\nRefreshing Potion"}
+
+if (scene == 3 && canvasX > 640 && canvasX < 800 && canvasY > 70 && canvasY < 310 && p2 > 1 && blosPotion == 0){p2 = p2 - 2; blosPotion = 1;  printout+="\n\nBlossom Potion"}
+
+if (scene == 2 && canvasX > 200 && canvasY > 320 && canvasX < 650 && canvasY < 400){scene = 3;}
+
+if (warning == 1 && scene == 1 && canvasX > 0 && canvasY > 308 && canvasX < 190 && canvasY < 400){scene = 2;}
+
 }//End clickfunc
 
 var myVar = setInterval(move, 20);
@@ -214,13 +229,24 @@ var delshiftY = -1200;
 
 var acc = 0;
 
+var slipPotion = 0;
+
+var sensPotion = 0;
+
+var refreshPotion = 0;
+
+var blosPotion = 0;
+
 var printout = "";
 
-var p1 = 30;
-var p2 = 20;
-var p3 = 10; 
+var p1 = 40;
+var p2 = 30;
+var p3 = 20; 
 
+var purchasedArray = [];
 var warning = 0;
+
+var animX = 0;
 
 function move() {
 
@@ -245,7 +271,7 @@ ctx.drawImage(arrows,0,20,800,400);
 ctx.drawImage(info,0,0,800,400);
 
 
-if (p1 < 2 || p2 < 2 || p3 < 2){warning = 1;}
+if (p1 < 10 || p2 < 5 || p3 < 2){warning = 1;}
 
 if (warning == 1){ctx.drawImage(out,0,0,800,400);}
 
@@ -268,6 +294,42 @@ if (shiftY > delshiftY){shiftY -= acc; acc = acc - 1;}
 
 
 }//END SCENE 1
+
+if (scene == 2){
+ctx.drawImage(page4,0,0,800,400);
+
+for(var i = 0; i < purchasedArray.length ; i++) {		
+    myImage = new Image(100, 200);
+    myImage.src = 'celebs/' + purchasedArray[i] + '.png';
+    ctx.drawImage(myImage,i*100 + 30 - animX,167,100,133);
+	ctx.drawImage(myImage,i*100 + 30 - animX + 100*purchasedArray.length,167,100,133);
+	animX+=0.2;
+	if (animX > 100*purchasedArray.length){animX = 0;}
+}
+
+
+}//END SCENE 2
+
+if (scene == 3){
+ctx.drawImage(page5,0,0,800,400);
+
+ctx.font = "30px Times New Roman";
+ctx.fillStyle = "white";
+ctx.drawImage(playertab,-10,45,800,400);
+ctx.fillText("X " + String(p1),90 - 10,105 + 45);
+ctx.fillText("X " + String(p2),90 - 10,185 + 45);
+ctx.fillText("X " + String(p3),90 - 10,262 + 45);
+
+if (slipPotion == 1){ctx.drawImage(check,200,80,100,100);}
+if (sensPotion == 1){ctx.drawImage(check,350,80,100,100);}
+if (refreshPotion == 1){ctx.drawImage(check,500,80,100,100);}
+if (blosPotion == 1){ctx.drawImage(check,650,80,100,100);}
+
+}
+
+if (scene == 4){
+ctx.drawImage(page6,0,0,800,400);
+}
 
 //Prototypes
 for(var i = 0; i < buttonArray.length ; i++) {
@@ -301,6 +363,15 @@ document.getElementById("demo").innerHTML = printout;
 }//End of FUNCTION
 
 
+function copytoclipboard(text) {
+   const elem = document.createElement('textarea');
+   elem.value = text;
+   document.body.appendChild(elem);
+   elem.select();
+   document.execCommand('copy');
+   document.body.removeChild(elem);
+}
+
 </script>
 
 <p class="a" id = "demo" value = ""></p>
@@ -321,6 +392,9 @@ document.getElementById("demo").innerHTML = printout;
 <img id="page1"  style="display:none; visibility:hidden;" src="pages/page1.png" alt="">
 <img id="page2"  style="display:none; visibility:hidden;" src="pages/page2.png" alt="">
 <img id="page3"  style="display:none; visibility:hidden;" src="pages/page3.png" alt="">
+<img id="page4"  style="display:none; visibility:hidden;" src="pages/page4.png" alt="">
+<img id="page5"  style="display:none; visibility:hidden;" src="pages/page5.png" alt="">
+<img id="page6"  style="display:none; visibility:hidden;" src="pages/page6.png" alt="">
 
 
 </html> 
