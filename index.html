@@ -149,6 +149,30 @@ buttonArray.push(new button(319,60 + 400*12,200,2,1,1,"Willa Fitzgerald",1, "","
 buttonArray.push(new button(319,60 + 400*13,200,3,2,1,"Nikki Bella",1, "","on"));
 buttonArray.push(new button(319,60 + 400*14,200,4,3,2,"Madison Beer",1, "","on"));
 buttonArray.push(new button(319,60 + 400*15,200,3,2,1,"Penelope Cruz",1, "","on"));
+buttonArray.push(new button(319,60 + 400*16,200,5,4,3,"Salma Hayek",1, "","on"));
+buttonArray.push(new button(319,60 + 400*17,200,2,2,1,"Anya Chalotra",1, "","on"));
+buttonArray.push(new button(319,60 + 400*18,200,2,1,1,"Tina Fey",1, "","on"));
+buttonArray.push(new button(319,60 + 400*19,200,3,2,1,"Pom Klementieff",1, "","on"));
+buttonArray.push(new button(319,60 + 400*20,200,2,1,1,"Megan Thee Stallion",1, "","on"));
+buttonArray.push(new button(319,60 + 400*21,200,3,2,1,"Winona Ryder",1, "","on"));
+buttonArray.push(new button(319,60 + 400*22,200,2,2,1,"Naomi Watts",1, "","on"));
+buttonArray.push(new button(319,60 + 400*23,200,4,3,3,"Saoirse Ronan",1, "","on"));
+buttonArray.push(new button(319,60 + 400*24,200,2,1,1,"Gillian Jacobs",1, "","on"));
+buttonArray.push(new button(319,60 + 400*25,200,3,2,1,"Cobie Smulders",1, "","on"));
+buttonArray.push(new button(319,60 + 400*26,200,5,4,3,"Daisy Ridley",1, "","on"));
+buttonArray.push(new button(319,60 + 400*27,200,4,3,2,"Emily Blunt",1, "","on"));
+buttonArray.push(new button(319,60 + 400*28,200,4,3,2,"Demi Lovato",1, "","on"));
+buttonArray.push(new button(319,60 + 400*29,200,2,1,1,"Georgia Hirst",1, "","on"));
+buttonArray.push(new button(319,60 + 400*30,200,2,1,1,"Genevieve Morton",1, "","on"));
+buttonArray.push(new button(319,60 + 400*31,200,4,3,2,"Joey King",1, "","on"));
+buttonArray.push(new button(319,60 + 400*32,200,2,1,1,"Camilla Luddington",1, "","on"));
+buttonArray.push(new button(319,60 + 400*33,200,2,1,1,"Maude Apatow",1, "","on"));
+buttonArray.push(new button(319,60 + 400*34,200,3,2,1,"Bella Hadid",1, "","on"));
+buttonArray.push(new button(319,60 + 400*35,200,2,2,1,"Halston Sage",1, "","on"));
+buttonArray.push(new button(319,60 + 400*36,200,2,2,1,"Lily Collins",1, "","on"));
+buttonArray.push(new button(319,60 + 400*37,200,4,3,2,"Vanessa Kirby",1, "","on"));
+buttonArray.push(new button(319,60 + 400*38,200,3,2,1,"Nina Agdal",1, "","on"));
+buttonArray.push(new button(319,60 + 400*39,200,2,1,1,"Yoona Im",1, "","on"));
 
 
 function clickfunc(){
@@ -163,25 +187,30 @@ for(var i = 0; i < buttonArray.length ; i++) {
 			
 }
 
-if (shiftY == delshiftY){
-if (scene == 1 && canvasX > 190 && canvasX < 270 && canvasY > 90 && canvasY < 200 && shiftY != 0){delshiftY-=400; acc = 40;}
+if (shiftY - delshiftY < 100 && shiftY - delshiftY > -100){
+if (scene == 1 && canvasX > 190 && canvasX < 270 && canvasY > 90 && canvasY < 200 && shiftY > 100){delshiftY-=400; acc = 40;}
 if (scene == 1 && canvasX > 190 && canvasX < 270 && canvasY > 240 && canvasY < 330){delshiftY+=400; acc = 40;}
 }
 
+if (scene == -18 && canvasX > 220 && canvasX < 590 && canvasY > 315 && canvasY < 390){scene = 1; delshiftY+=400; acc = 40;}
+
+if (scene == -19 && canvasX > 220 && canvasX < 590 && canvasY > 315 && canvasY < 390){scene = -18; delshiftY+=400; acc = 40;}
+
+if (scene == -20 && canvasX > 220 && canvasX < 590 && canvasY > 250 && canvasY < 340){scene = -19; delshiftY+=400; acc = 40;}
 
 }//End clickfunc
 
 var myVar = setInterval(move, 20);
 
-var scene = 1; 
+var scene = -20; 
 
 var points = 10;
 
 var shiftX = 0;
 
-var shiftY = 0;
+var shiftY = -1200;
 
-var delshiftY = 0;
+var delshiftY = -1200;
 
 var acc = 0;
 
@@ -191,18 +220,42 @@ var p1 = 30;
 var p2 = 20;
 var p3 = 10; 
 
+var warning = 0;
+
 function move() {
 
 //BG
 ctx.fillStyle = "black";
 ctx.fillRect(0,0, 800, 400);
 
+if (scene == -20 || scene == -19 || scene == -18){
+ctx.drawImage(page1,0,-1200 - shiftY,800,400);
+ctx.drawImage(page2,0,-800 - shiftY,800,400);
+ctx.drawImage(page3,0,-400 - shiftY,800,400);
+
+if (shiftY < delshiftY){shiftY += acc; acc = acc - 1;}
+if (shiftY > delshiftY){shiftY -= acc; acc = acc - 1;}
+}
 
 if (scene == 1){
 ctx.drawImage(sky,0,0,800,400);
 ctx.drawImage(playertab,0,0,800,400);
+ctx.drawImage(page3,0,-400 - shiftY,800,400);
 ctx.drawImage(arrows,0,20,800,400);
+ctx.drawImage(info,0,0,800,400);
+
+
+if (p1 < 2 || p2 < 2 || p3 < 2){warning = 1;}
+
+if (warning == 1){ctx.drawImage(out,0,0,800,400);}
+
 if (shiftY <  200){ctx.drawImage(arrowstop,0,20,800,400);}
+if (shiftY >  15400){ctx.drawImage(arrowsbottom,0,20,800,400);}
+
+
+
+if (shiftY > 15600){shiftY = 15600;}
+if (delshiftY > 15600){delshiftY = 15600;}
 
 ctx.font = "30px Times New Roman";
 ctx.fillStyle = "white";
@@ -234,6 +287,7 @@ ctx.fillStyle = "white";
 ctx.fillText("X: " + canvasX,4,420);
 ctx.fillText("Y: " + canvasY,3,440);
 
+
 ctx.fillText("shiftX: " + shiftX,220,420);
 ctx.fillText("shiftY: " + shiftY,220,440);
 
@@ -261,6 +315,13 @@ document.getElementById("demo").innerHTML = printout;
 
 <img id="sky"  style="display:none; visibility:hidden;" src="gui/sky.png" alt="">
 <img id="cross"  style="display:none; visibility:hidden;" src="gui/cross.png" alt="">
+<img id="info"  style="display:none; visibility:hidden;" src="gui/info.png" alt="">
+<img id="out"  style="display:none; visibility:hidden;" src="gui/out.png" alt="">
+
+<img id="page1"  style="display:none; visibility:hidden;" src="pages/page1.png" alt="">
+<img id="page2"  style="display:none; visibility:hidden;" src="pages/page2.png" alt="">
+<img id="page3"  style="display:none; visibility:hidden;" src="pages/page3.png" alt="">
+
 
 </html> 
 
